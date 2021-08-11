@@ -6,7 +6,7 @@
 # two arguments: year and output-path
 # examples:
 #      ./getAWSgefsv12.sh 2000 /home/name/Downloads
-#      nohup ./getAWSgefsv12.sh 2000 /home/name/Downloads >> nohupout_getAWSgefsv12_2000.txt 2>&1 &
+#      nohup ./getAWSgefsv12winds.sh 2000 /home/name/Downloads >> nohupout_getAWSgefsv12winds_2000.txt 2>&1 &
 
 year=$1
 dpath=$2
