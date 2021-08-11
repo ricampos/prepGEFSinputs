@@ -11,7 +11,7 @@
 year=$1
 dpath=$2
 
-module load intel/2021.2 cdo/1.9.8 nco
+module load intel/2021.2 cdo/1.9.8 nco wgrib
 
 cd $dpath
 SERVER="http://noaa-gefs-retrospective.s3.amazonaws.com/GEFSv12/reforecast"
@@ -55,10 +55,16 @@ for month in `seq 1 12`; do
           TE=$?
           if [ "$TE" -eq 0 ]; then
             # convert from grib2 to netcdf
-            cdo -f nc copy ${fname}".grib2" ${fname}".aux1.nc" &&
+            # cdo -f nc copy ${fname}".grib2" ${fname}".aux1.nc" &&
+            wgrib2 ${fname}".grib2" -netcdf ${fname}".aux1.nc" &&
+            # correct time array
+	    # cdo setreftime,1970-01-01,00:00:00,seconds ${fname}".aux1.nc" ${fname}".aux2.nc" &&
             # remove wind at 100m
-            ncks -x -v 100${var} ${fname}".aux1.nc" ${fname}".aux2.nc" &&
-            ncpdq -O -a -lat ${fname}".aux2.nc" ${fname}".D"${fg}".nc" &&
+            ncks -x -v ${var^}GRD_100maboveground ${fname}".aux1.nc" ${fname}".aux2.nc" &&
+            # modify variable name
+            ncrename -v ${var^}GRD_10maboveground,10${var} ${fname}".aux2.nc" ${fname}".D"${fg}".nc" &&
+            # correct latitudes, starting with -90.
+            # ncpdq -O -a -lat ${fname}".aux2.nc" ${fname}".D"${fg}".nc" &&
             sleep 1
             rm *.aux*.nc
             rm ${fname}".grib2"
