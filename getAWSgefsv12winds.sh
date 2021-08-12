@@ -60,9 +60,9 @@ for month in `seq 1 12`; do
             # correct time array
 	    # cdo setreftime,1970-01-01,00:00:00,seconds ${fname}".aux1.nc" ${fname}".aux2.nc" &&
             # remove wind at 100m
-            ncks -x -v ${var^}GRD_100maboveground ${fname}".aux1.nc" ${fname}".aux2.nc" &&
+            ncks -x -v ${var^}"GRD_100maboveground" ${fname}".aux1.nc" ${fname}".aux2.nc" &&
             # modify variable name
-            ncrename -v ${var^}GRD_10maboveground,10${var} ${fname}".aux2.nc" ${fname}".D"${fg}".nc" &&
+            ncrename -v ${var^}"GRD_10maboveground",${var}"wnd" ${fname}".aux2.nc" ${fname}".D"${fg}".nc" &&
             # correct latitudes, starting with -90.
             # ncpdq -O -a -lat ${fname}".aux2.nc" ${fname}".D"${fg}".nc" &&
             sleep 1
