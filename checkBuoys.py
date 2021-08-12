@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from pylab import *
-import pylab
 from mpl_toolkits.basemap import Basemap
 
 # Read NDBC buoys, lat/lon and buoyID
