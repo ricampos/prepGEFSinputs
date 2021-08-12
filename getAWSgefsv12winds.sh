@@ -112,5 +112,5 @@ done
 # remove empty files (errors)
 find -empty -type f -delete
 
-echo "Download GEFSv12 AWS wind (U10,V10) for "$year" is complete, at "$dpath
+echo "Download GEFSv12 AWS wind (uwnd,vwnd) for "$year" is complete, at "$dpath
 
