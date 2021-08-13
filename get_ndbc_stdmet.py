@@ -7,12 +7,13 @@
 #      python3 get_ndbc_stdmet.py 2010 2020 allbstations.dat /home/name/Dowloads
 #      nohup python3 get_ndbc_stdmet.py 2010 2020 allbstations.dat /home/name/Dowloads >> nohup_get_ndbc_stdmet.txt 2>&1 &
 
-import urllib.request
-import pandas as pd
-from pylab import *
-import numpy as np
-import sys
 import os
+import sys
+import numpy as np
+import pandas as pd
+import urllib.request
+from pathlib2 import Path
+from pylab import *
 
 iyear=np.str(sys.argv[1]) # first year
 fyear=np.str(sys.argv[2]) # final year
@@ -56,6 +57,12 @@ for st in range(0,size(bidabs)):
 	if tb>0:
 		os.system("cat "+odir+"/NDBC_Historical_stdmet_"+namest.upper()+"_*.dat >> "+odir+"/NDBC_historical_stdmet_"+namest.upper()+".txt")
 		os.system("rm -f "+odir+"/NDBC_Historical_stdmet_"+namest.upper()+"_*.dat")
+
+		path = Path(odir+"/NDBC_historical_stdmet_"+namest.upper()+".txt")
+		text = path.read_text()
+		text = text.replace("YYYY","#YYYY")
+		path.write_text(text)
+		del path, text
 
 	else:
 		print(" "); print(" No data for "+namest+"  from "+iyear+" to "+fyear); print(" ")
