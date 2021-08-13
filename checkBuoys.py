@@ -21,6 +21,15 @@ for i in range(0,dfgfs.values.shape[0]-1):
 	bposgfs[i,1]=np.float(aux[1]) # lon
 	bidgfs=np.append(bidgfs,np.str(aux[3][1::]).split("'")[0])
 
+dfabs = pd.read_csv("allbstations.dat", comment='$')
+bposabs=np.zeros((dfabs.values.shape[0]-1,2),'float')*np.nan; bidabs=[]
+for i in range(0,dfabs.values.shape[0]-1):
+	aux=np.str(dfabs.values[i]).split()
+	bposabs[i,0]=np.float(aux[2]) # lat
+	bposabs[i,1]=np.float(aux[1]) # lon
+	bidabs=np.append(bidabs,np.str(aux[3][1::]).split("'")[0])
+
+
 # Check if all GEFS buoys are contained in GFS list
 for i in range(0,size(bidgefs)):
 	ind = np.where( bidgfs == bidgefs[i])
@@ -40,7 +49,7 @@ for i in range(0,size(bidgfs)):
 
 
 # Plot positions
-scolors=np.array(['darkblue','darkgreen'])
+scolors=np.array(['darkblue','darkgreen','firebrick'])
 
 # GFS
 fig, ax = plt.subplots(figsize=(12,6.5))
@@ -80,3 +89,20 @@ savefig('GEFSbuoys.png', dpi=300, facecolor='w', edgecolor='w',orientation='port
 plt.close()
 
 
+# All buoys & stations
+fig, ax = plt.subplots(figsize=(12,6.5))
+map = Basemap(projection='mill',llcrnrlat=-75.,urcrnrlat=75.,llcrnrlon=-180.,urcrnrlon=180.,resolution='c')
+map.fillcontinents(color='silver', zorder=1)
+map.drawcountries(linewidth=0.5, linestyle='solid', color='grey', antialiased=1, ax=None, zorder=2)
+# map.drawcoastlines(linewidth=1., color='k', zorder=2)
+for i in range(0,size(bidabs)):
+	xs,ys = map(bposabs[i,1],bposabs[i,0])
+	map.plot(xs,ys,marker='.',color=scolors[2],ms="6")
+	# plt.text(xs,ys,bidabs[i], fontsize=6)
+
+map.drawmeridians(np.linspace(0,360,13),labels=[0,0,0,1],linewidth=0.3,fontsize=12) 
+map.drawparallels(np.linspace(-60,60,9),labels=[1,0,0,0],linewidth=0.3,fontsize=12) 
+fig.tight_layout()
+savefig('Allbuoys.eps', format='eps', dpi=1000)
+savefig('Allbuoys.png', dpi=300, facecolor='w', edgecolor='w',orientation='portrait', papertype=None, format='png',transparent=False, bbox_inches='tight', pad_inches=0.1)
+plt.close()
