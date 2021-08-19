@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Shell script to dowload GEFSv12 from AWS
+# Shell script to dowload GEFSv12 from AWS, convert, compress, and organize into netcdf output files
 # https://noaa-gefs-retrospective.s3.amazonaws.com/index.html
-# Only 10m wind components (10u and 10v)
+# Only 10m wind components (uwnd and vwnd)
 # two arguments: year and output-path
 # examples:
 #      ./getAWSgefsv12.sh 2000 /home/name/Downloads
@@ -11,7 +11,8 @@
 year=$1
 dpath=$2
 
-module load intel/2021.2 cdo/1.9.8 nco wgrib
+# module load intel/2021.2 cdo/1.9.8 nco wgrib
+module load intel/2021.2 nco wgrib
 
 cd $dpath
 SERVER="http://noaa-gefs-retrospective.s3.amazonaws.com/GEFSv12/reforecast"
